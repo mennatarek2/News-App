@@ -3,10 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news_app_route/core/routes_manager/colors_manager.dart';
 import 'package:news_app_route/features/splash/home/categories_view/categories_view.dart';
-import 'package:news_app_route/features/splash/home/category_item.dart';
+import 'package:news_app_route/features/splash/home/categories_view/category_item.dart';
 import 'package:news_app_route/features/splash/home/home_drawer/home_drawer.dart';
 import 'package:news_app_route/features/splash/home/sources_view/sources_view.dart';
 import 'package:news_app_route/models/category_model.dart';
+import 'package:news_app_route/providers/home_provider.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,29 +18,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Widget homeView = CategoriesView(
-    onCategoryItemClicked: onCategoryItemClicked,
-  );
-  String title = 'Home';
-
   @override
   Widget build(BuildContext context) {
+    var homePovider = Provider.of<HomeProvider>(context);
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      drawer: HomeDrawer(goToHome: goToHome),
-      body: homeView,
+      appBar: AppBar(title: Text(homePovider.title)),
+      drawer: HomeDrawer(),
+      body: homePovider.homeView,
     );
   }
 
-  void onCategoryItemClicked(CategoryModel selectedCategory) {
-    homeView = SourcesView(category: selectedCategory);
-    title = selectedCategory.title;
-    setState(() {});
-  }
-
-  void goToHome() {
-    homeView = CategoriesView(onCategoryItemClicked: onCategoryItemClicked);
-    Navigator.pop(context);
-    setState(() {});
-  }
+ 
 }
